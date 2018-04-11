@@ -18,13 +18,29 @@ app.get('/',(req, res, next)=> {
             })
         }
         // Si no hay errores nos muestre los proveedores
-        // res.status(200).json({
-        //     ok: true,
-        //     proveedores: proveedores
-        // });
-        res.status(200).json(proveedores);
+        res.status(200).json({
+            ok: true,
+            proveedores: proveedores
+        });
     });
 }),
+
+// Método para obetener un solo proveedor y luego poder actualizarlo en la aplicación
+app.get('/:id', function(req, res, next) {
+    Proveedor.findById(req.params.id, (err, proveedor)=> {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error acceso DB',
+                errores: err
+            })
+        }
+        res.status(200).json({
+            ok: true,
+            proveedor: proveedor
+        })
+    });
+});
 
 // Método post para crear en nuestra base de datos un proveedor
 app.post('/', (req, res)=> {
