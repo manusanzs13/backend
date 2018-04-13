@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 var proveedor = require('./routes/proveedor');
+var factura = require('./routes/factura');
 
 var app = express();
 
@@ -34,6 +35,8 @@ app.use(bodyParser.urlencoded({'extended': false}));
 
 // Enrutar a proveedor para que nos haga los métodos
 app.use('/proveedor', proveedor);
+
+app.use('/factura', factura);
 
 app.listen(3000, function() {
     console.log('Servidor OK en el puerto 3000');
