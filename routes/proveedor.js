@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 
 // Importamos el archivo de models que está exportado allí
 var Proveedor = require('../models/proveedor');
+// Importamos para proteger con el token
+var autentoken = require('../middleware/autentoken');
 
 var app = express();
 
@@ -43,7 +45,8 @@ app.get('/:id', function(req, res, next) {
 });
 
 // Método post para crear en nuestra base de datos un proveedor
-app.post('/', (req, res)=> {
+// y lo hace verificando el token para comprobar que sea un usuario que pueda hacerlo
+app.post('/', (req, res, next)=> {
     // Variable en la que guardar los datos que recibimos del cuerpo
     var body = req.body;
     // Variable en la que construimos un objeto con el proveedor
@@ -89,14 +92,15 @@ app.put('/:id', function(req, res, next) {
     });
 });
 
-// Método delete, borrar contenido
-app.delete('/:id', function(req, res, error) {
+// Método delete, borrar contenido y lo hace verificando el token para comprobar que sea un usuario que pueda hacerlo
+app.delete('/:id', autentoken.verificarToken, function(req, res, error) {
     // Buscar por id y borrar
     Proveedor.findByIdAndRemove(req.params.id, function(err, datos) {
         if (err) return next(err);
+        var mensaje = 'Proveedor ' + datos.nombre + ' eliminado';
         res.status(201).json({
             ok: true,
-            mensaje: 'Proveedor eliminado'
+            mensaje: mensaje
         });
     });
 });
