@@ -31,7 +31,7 @@ app.post('/', (req, res, next)=> {
             })
         }
         // Controlar el login y cifrarlo (datos cifrados, contraseña, tiempo)
-        var token = jsonwebtoken.sign({usuario:datos},'asñdlgaeiugh');
+        var token = jsonwebtoken.sign({usuario:datos},'asñdlgaeiugh', {expiresIn: 60});
         // Respuesta
         res.status(200).json({
             ok: true,
